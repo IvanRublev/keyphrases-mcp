@@ -1,0 +1,36 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "name": "io.github.IvanRublev/keyphrases-mcp",
+  "description": "An MCP server to extract keyphrases from a text with the BERT model",
+  "repository": {
+    "url": "https://github.com/IvanRublev/keyphrases-mcp",
+    "source": "github"
+  },
+  "version": "{{ VERSION }}",
+  "packages": [
+    {
+      "registryType": "pypi",
+      "identifier": "keyphrases-mcp",
+      "version": "{{ VERSION }}",
+      "transport": {
+        "type": "stdio"
+      },
+      "runtimeHint": "uvx",
+      "runtimeArguments": [
+        {
+          "type": "positional",
+          "value": "keyphrases-mcp-server"
+        },
+        {
+          "type": "named",
+          "name": "--allowed-dir",
+          "valueHint": "documents_directory",
+          "description": "Directory containing documents to process",
+          "format": "filepath",
+          "isRequired": true
+        }
+      ],
+      "environmentVariables": []
+    }
+  ]
+}

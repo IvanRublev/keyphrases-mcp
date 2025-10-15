@@ -66,7 +66,7 @@ environment variable (see the `src/config.py` for details).
 Run the keyphrases-mcp server locally and expose it to the internet via `ngrok`:
 
 ```sh
-uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git start-mcp-server --allowed-dir <path_to_documents> --http
+uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --allowed-dir <path_to_documents> --http
 ngrok http 8000
 ```
 Note the public URL (e.g., https://your-server.ngrok.io) for the next steps.
@@ -137,10 +137,10 @@ You can troubleshoot your agent workflows using the [OpenAI dashboard](https://p
 
 ### Claude Desktop
 
-Run the following command once to download embeddings model.
+Run the following command once to download embeddings and spaCy models.
 
 ```sh
-<path_to_uvx>/bin/uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --download-embeddings
+<path_to_uvx>/bin/uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --download-models
 ```
 
 Update the Claude configuration file on macOS: `~/Library/Application Support/Claude/claude_desktop_config.json` on windows: `%APPDATA%\Claude\claude_desktop_config.json`

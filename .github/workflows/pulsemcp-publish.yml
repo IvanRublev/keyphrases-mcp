@@ -1,0 +1,70 @@
+name: Publish to MCP Registry
+
+on:
+  workflow_run:
+    workflows: ["Publish to PyPI"]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Publish to pulsemcp'
+        required: true
+        type: string
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      id-token: write  # Required for OIDC authentication
+      contents: read
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        
+      - name: Install dependencies and run tests
+        run: |
+          uv sync --dev
+          uv run ruff check .
+          uv run pytest
+          
+      - name: Test server installation and basic functionality
+        run: |
+          # Test that the server can be installed and run basic commands
+          uv run python -m src.main --help
+          
+      - name: Install validation dependencies
+        run: |
+          pip install jsonschema requests
+          
+      - name: Validate server.json schema
+        run: |
+          python scripts/pulsemcp_validate_server_json.py
+          
+      - name: Sync version between pyproject.toml and server.json
+        run: |
+          python scripts/pulsemcp_sync_version.py
+          
+      - name: Install MCP Publisher
+        run: |
+            ARCHIVE_NAME="mcp-publisher_$(uname -s | tr '[:upper:]' '[:lower:]')_$(uname -m | sed 's/x86_64/amd64/;s/aarch64/arm64/').tar.gz"
+            echo "Archive name: $ARCHIVE_NAME"
+            curl -L "https://github.com/modelcontextprotocol/registry/releases/latest/download/$ARCHIVE_NAME" | tar xz mcp-publisher
+            chmod +x mcp-publisher
+          
+      - name: Login to MCP Registry
+        run: ./mcp-publisher login github-oidc
+        
+      - name: Publish to MCP Registry
+        run: ./mcp-publisher publish

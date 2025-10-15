@@ -11,7 +11,7 @@ ADD https://api.github.com/repos/IvanRublev/keyphrases-mcp/git/refs/heads/ /tmp/
 
 RUN git clone https://github.com/IvanRublev/keyphrases-mcp . && git checkout latest
 
-RUN (uv sync) && (uv run keyphrases-mcp-server --download-embeddings) && (mkdir -p /app/documents)
+RUN (uv sync) && (uv run keyphrases-mcp-server --download-models) && (mkdir -p /app/documents)
 
 RUN echo '#!/bin/sh' > /app/run.sh && echo 'uv run keyphrases-mcp-server -a /app/documents' >> /app/run.sh && chmod +x /app/run.sh
 

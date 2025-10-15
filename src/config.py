@@ -25,7 +25,7 @@ def getenv_type(name: str, default, type):
 EMBEDDINGS_MODEL = os.getenv("MCP_KEYPHRASES_EMBEDDINGS_MODEL") or "paraphrase-multilingual-MiniLM-L12-v2"
 
 # It's hardcoded as project dependency, see pyproject.toml
-SPACY_TOKENIZER_MODEL = "en_core_web_trf"
+SPACY_TOKENIZER_MODEL = os.getenv("MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL") or "en_core_web_trf"
 
 LOG_LEVEL = os.getenv("MCP_KEYPHRASES_LOG_LEVEL")
 

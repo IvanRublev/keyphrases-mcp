@@ -33,3 +33,6 @@ uv.lock
 
 # embedding model directory
 embeddings_model/
+
+# MCP registry tokens
+.mcpregistry_*
