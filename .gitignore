@@ -32,4 +32,4 @@ uv.lock
 /htmlcov/
 
 # embedding model directory
-embedding_model/
+embeddings_model/

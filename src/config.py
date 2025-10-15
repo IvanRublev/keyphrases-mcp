@@ -8,7 +8,7 @@ load_dotenv()
 os.environ["TOKENIZERS_PARALLELISM"] = "false"  # to avoid huggingface/tokenizers warning
 
 PROJECT_ROOT = Path(__file__).parent.parent
-embeddings_model_path = PROJECT_ROOT / "embedding_model"
+embeddings_model_path = PROJECT_ROOT / "embeddings_model"
 
 
 # Get environment variables

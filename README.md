@@ -107,7 +107,7 @@ docker build -f Dockerfile-deploy -t keyphrases-mcp .
 Run the container exposing ports, temporary directory to store the embeddings model, and documents directory.
 
 ```sh
-docker run --rm --name keyphrases-mcp-server -i -v <tmp_directory_path>/embedding_model:/app/embedding_model -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
+docker run --rm --name keyphrases-mcp-server -i -v <tmp_directory_path>/embeddings_model:/app/embeddings_model -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
 ````
 
 ### OpenAI Agents SDK

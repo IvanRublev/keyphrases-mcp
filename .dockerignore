@@ -46,4 +46,4 @@ Dockerfile
 docker-compose.yml
 
 # embedding model directory
-embedding_model/
+embeddings_model/
