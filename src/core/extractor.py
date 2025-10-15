@@ -1,3 +1,4 @@
+from importlib.util import find_spec
 import os
 import shutil
 from typing import Callable, cast, TYPE_CHECKING
@@ -37,6 +38,20 @@ def dowload_embeddings_model(on_start: Callable[[], Callable], on_stop: Callable
 
         model = SentenceTransformer(f"sentence-transformers/{EMBEDDINGS_MODEL}")
         model.save(str(embeddings_model_path))
+
+        on_stop(fun)
+
+
+def download_spacy_model(on_start: Callable[[], Callable], on_stop: Callable[[Callable], None]):
+    """Download the spacy model if not already installed."""
+    if not find_spec(SPACY_TOKENIZER_MODEL):
+        # Model not found, download it
+        fun = on_start()
+
+        import spacy.cli
+
+        # Download the spaCy model without showing the animated progress bar
+        spacy.cli.download(SPACY_TOKENIZER_MODEL)
 
         on_stop(fun)
 

@@ -2,7 +2,7 @@ import click
 import logging
 
 from src.config import EMBEDDINGS_MODEL, SPACY_TOKENIZER_MODEL, HTTP_PORT, set_allowed_dirs
-from src.core.extractor import dowload_embeddings_model, initialize_keybert
+from src.core.extractor import dowload_embeddings_model, download_spacy_model, initialize_keybert
 from src.file_processor import keyphrases_from_textfile
 from src.infra.logger import LoggerProtocol
 from src.infra.logger_stdout import LoggerStdout
@@ -26,12 +26,12 @@ from src.infra.logger_system import LoggerSystem, configure_logging
     help="Run the MCP server with Streamable HTTP transport. When flag is missing its STDIO transport.",
 )
 @click.option(
-    "--download-embeddings",
-    "-de",
+    "--download-models",
+    "-dm",
     is_flag=True,
     default=False,
     help=(
-        "Don't run the server, download the embeddings model only. "
+        "Don't run the server, download the embeddings and spaCy models only. "
         "Useful during initial setup, f.e. in docker image. "
         "Returns immideately if the model has been already downloaded."
     ),
@@ -54,7 +54,7 @@ from src.infra.logger_system import LoggerSystem, configure_logging
 def main(
     allowed_dir: tuple[str],
     http: bool,
-    download_embeddings: bool,
+    download_models: bool,
     file_path: str | None,
     file_keyphrases_count: int | None,
 ):
@@ -65,11 +65,15 @@ def main(
         common_init(logger, ())
         keyphrases = keyphrases_from_textfile(file_path, file_keyphrases_count, logger)
         logger.print('{"keyphrases": ' + str(keyphrases) + "}")
-    elif download_embeddings:
+    elif download_models:
         configure_logging()
         logger = LoggerSystem(logging.getLogger(__name__))
         dowload_embeddings_model(
             lambda: logger.print_spinner("Downloading embeddings model ~500MB ..."),
+            lambda stop_spinner: stop_spinner("Done."),
+        )
+        download_spacy_model(
+            lambda: logger.print_spinner("Downloading spacy model ~500MB ..."),
             lambda stop_spinner: stop_spinner("Done."),
         )
     else:
@@ -94,6 +98,11 @@ def common_init(logger: LoggerProtocol, allowed_dirs: tuple):
 
     dowload_embeddings_model(
         lambda: logger.print_spinner("Downloading embeddings model ~500MB ..."),
+        lambda stop_spinner: stop_spinner("Done."),
+    )
+
+    download_spacy_model(
+        lambda: logger.print_spinner("Downloading spacy model ~500MB ..."),
         lambda stop_spinner: stop_spinner("Done."),
     )
 

@@ -1,22 +1,35 @@
 [project]
 name = "keyphrases-mcp"
-version = "0.0.1"
+version = "0.0.4"
 description = "Keyphrases MCP server - Model Context Protocol server to extract keyphrases from a text using a BERT model"
-readme = "README.md"
+readme = "README-pypi.md"
 requires-python = ">=3.12"
-license = "MIT"
-keywords = ["redis", "mcp", "model-context-protocol", "ai", "llm"]
+license = {text = "MIT"}
+keywords = ["keyphrases", "keywords", "metadata", "mcp", "model-context-protocol", "ai", "llm", "bert", "nlp", "text-analysis"]
 authors = [
     {name = "Ivan Rublev", email = "git@ivanrublev.me"}
 ]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Text Processing :: Linguistic",
+]
+homepage = "https://github.com/IvanRublev/keyphrases-mcp"
+repository = "https://github.com/IvanRublev/keyphrases-mcp"
+issues = "https://github.com/IvanRublev/keyphrases-mcp/issues"
+
 dependencies = [
     "click>=8.3.0",
     "dotenv>=0.9.9",
-    "en-core-web-trf",
     "fastmcp>=2.12.4",
     "keybert[spacy]>=0.9.0",
     "keyphrase-vectorizers>=0.0.13",
     "numpy>=1.0,<2.0",
+    "pip>=24.0",
     "toml>=0.10.2",
     "torch==2.2.2",
 ]
@@ -40,10 +53,9 @@ dev = [
     "pytest-mock>=3.15.1",
     "pytest-watcher>=0.4.3",
     "ruff>=0.14.0",
+    "jsonschema>=4.0.0",
+    "requests>=2.25.0",
 ]
-
-[tool.uv.sources]
-en-core-web-trf = { url = "https://github.com/explosion/spacy-models/releases/download/en_core_web_trf-3.8.0/en_core_web_trf-3.8.0-py3-none-any.whl" }
 
 [tool.pyrefly]
 project-includes = ["src"]

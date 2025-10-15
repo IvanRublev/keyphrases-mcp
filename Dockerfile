@@ -6,7 +6,7 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
-RUN uv run keyphrases-mcp-server --download-embeddings
+RUN uv run keyphrases-mcp-server --download-models
 RUN mkdir -p /app/documents
 
 CMD ["uv", "run", "keyphrases-mcp-server", "--allowed-dir", "/app/documents", "--http"]
