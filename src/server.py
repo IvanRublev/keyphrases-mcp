@@ -4,12 +4,14 @@ import os
 from pathlib import Path
 import time
 import toml
+import uvicorn
 
 from mcp.types import ToolAnnotations
 from fastmcp import FastMCP
 from fastmcp.exceptions import ToolError
+from starlette.middleware.cors import CORSMiddleware
 
-from src.config import PROJECT_ROOT, MAX_TEXT_LEN, MAX_KEYPHRASES_COUNT, get_allowed_dirs
+from src.config import PROJECT_ROOT, MAX_TEXT_LEN, MAX_KEYPHRASES_COUNT, HTTP_PORT, get_allowed_dirs
 from src.core.extractor import extract_keyphrases as _extract_keyphrases
 
 toml_path = PROJECT_ROOT / "pyproject.toml"
@@ -19,6 +21,24 @@ with open(toml_path, "r") as file:
 
 mcp = FastMCP("Keyphrases MCP Server", version=_pyproject_content["project"]["version"])
 _logger = logging.getLogger(__name__)
+
+
+def run_server_stdio():
+    mcp.run(show_banner=False)
+
+
+def run_server_streamable_http():
+    app = mcp.http_app()
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=True,
+        allow_methods=["GET", "POST", "OPTIONS"],
+        allow_headers=["*"],
+        expose_headers=["mcp-session-id", "mcp-protocol-version"],
+        max_age=86400,
+    )
+    uvicorn.run(app, host="0.0.0.0", port=HTTP_PORT, log_level="info")
 
 
 @mcp.tool(

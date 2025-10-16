@@ -6,10 +6,16 @@ COPY . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync
 
+# Support custom models as build arguments
+ARG MCP_KEYPHRASES_EMBEDDINGS_MODEL
+ARG MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL
+ENV MCP_KEYPHRASES_EMBEDDINGS_MODEL=${MCP_KEYPHRASES_EMBEDDINGS_MODEL}
+ENV MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL=${MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL}
 RUN uv run keyphrases-mcp-server --download-models
+
 RUN mkdir -p /app/documents
 
 CMD ["uv", "run", "keyphrases-mcp-server", "--allowed-dir", "/app/documents", "--http"]
 
 # docker build -f Dockerfile-deploy -t keyphrases-mcp .
-# docker run --rm --name keyphrases-mcp-server -i -v ./embeddings_model:/app/embeddings_model -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
+# docker run --rm --name keyphrases-mcp-server -i -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest

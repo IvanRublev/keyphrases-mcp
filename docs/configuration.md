@@ -21,3 +21,27 @@ for BERT. The `"paraphrase-multilingual-MiniLM-L12-v2"` for multi-lingual docume
 
 The are various spaCy [pretrained models](https://spacy.io/models/en/#en_core_web_trf).
 
+If you want to build docker image with custom models, then provide MCP_KEYPHRASES_EMBEDDINGS_MODEL and MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL
+variables both as arguments to build the docker image:
+
+```bash
+docker build \
+    --build-arg MCP_KEYPHRASES_EMBEDDINGS_MODEL="<selecled_embeddings_model>" \
+    --build-arg MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL="<selected_spacy_model>" \
+    -t mcp-keyphrases:latest .
+```
+
+and as environment variables to run the container:
+
+```bash
+docker run 
+    --rm \
+    --name keyphrases-mcp-server \
+    -i \
+    -v <path_to_documents>:/app/documents \
+    -p 8000:8000 \
+    -e MCP_KEYPHRASES_EMBEDDINGS_MODEL="<selecled_embeddings_model>" \
+    -e MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL="<selected_spacy_model>" \
+    mcp-keyphrases:latest
+```
+

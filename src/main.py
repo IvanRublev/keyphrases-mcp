@@ -1,7 +1,7 @@
 import click
 import logging
 
-from src.config import EMBEDDINGS_MODEL, SPACY_TOKENIZER_MODEL, HTTP_PORT, set_allowed_dirs
+from src.config import EMBEDDINGS_MODEL, SPACY_TOKENIZER_MODEL, set_allowed_dirs
 from src.core.extractor import dowload_embeddings_model, download_spacy_model, initialize_keybert
 from src.file_processor import keyphrases_from_textfile
 from src.infra.logger import LoggerProtocol
@@ -83,12 +83,12 @@ def main(
             raise ValueError("At least one --allowed-dir argument should be specified.")
         logger.print("Keyphrases MCP server")
         common_init(logger, allowed_dir)
-        from src.server import mcp
+        from src.server import run_server_stdio, run_server_streamable_http
 
         if http:
-            mcp.run(transport="streamable-http", port=HTTP_PORT)
+            run_server_streamable_http()
         else:
-            mcp.run(show_banner=False)
+            run_server_stdio()
 
 
 def common_init(logger: LoggerProtocol, allowed_dirs: tuple):

@@ -50,10 +50,11 @@ Build the image, it will take ~10 GB of the disk space.
 docker build -f Dockerfile -t keyphrases-mcp .
 ```
 
-Run the container exposing ports, temporary directory to store the embeddings model, and documents directory (replace tmp_directory_path and path_to_documents with appropriate paths on your system) to validate it's starting properly.
+Run the container exposing ports and documents directory (replace path_to_documents with appropriate path on your system)
+to validate it's starting properly.
 
 ```sh
-docker run --rm --name keyphrases-mcp-server -i -v <tmp_directory_path>/embeddings_model:/app/embeddings_model -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
+docker run --rm --name keyphrases-mcp-server -i -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
 ```
 
 Add the following configuration to your MCP client settings with validated paths:
@@ -68,7 +69,6 @@ Add the following configuration to your MCP client settings with validated paths
             "--rm",
             "--name", "keyphrases-mcp-server",
             "-i",
-            "-v", "<tmp_directory_path>/embeddings_model:/app/embeddings_model",
             "-v", "<path_to_documents>:/app/documents",
             "-p", "8000:8000",
             "keyphrases-mcp:latest"
