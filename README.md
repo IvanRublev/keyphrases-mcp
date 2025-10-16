@@ -44,178 +44,20 @@ This MCP server combines BERT for keyphrase extraction with an autoregressive LL
 
 The server uses a KeyBERT framework for the multi-step extraction pipeline combining spaCy NLP preprocessing with BERT embeddings:
 
-1. **Candidate Generation**: **KeyphraseCountVectorizer** identifies meaningful keyphrase candidates using spaCy's **en_core_web_trf** 
-[model](https://spacy.io/models/en/#en_core_web_trf) and discarding stop words
+1. **Candidate Generation**: **KeyphraseCountVectorizer** identifies meaningful keyphrase candidates using spaCy's **en_core_web_trf** model and discarding stop words
 2. **Semantic Encoding**: Candidates and document are embedded using **paraphrase-multilingual-MiniLM-L12-v2** sentence transformer
 3. **Relevance Ranking**: **KeyBERT** calculates cosine similarity between candidate keyphrase and document embeddings
 4. **Diversity Selection**: **Maximal Marginal Relevance (MMR)** ensures diverse, non-redundant keyphrases
 5. **Final Output**: Top N most relevant and diverse keyphrases are selected and sorted alphabetically
 
-There are various [pretrained embedding models](https://www.sbert.net/docs/sentence_transformer/pretrained_models.html)
-for BERT. The `"paraphrase-multilingual-MiniLM-L12-v2"` for multi-lingual documents or any other language that is used by default. 
+See configuration document for details.
 
-You can specify `"all-MiniLM-L6-v2"` model for English documents by exporting `MCP_KEYPHRASES_EMBEDDINGS_MODEL`
-environment variable (see the `src/config.py` for details). 
+## Documentation
 
-
-
-## Integration
-
-### OpenAI
-
-Run the keyphrases-mcp server locally and expose it to the internet via `ngrok`:
-
-```sh
-uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --allowed-dir <path_to_documents> --http
-ngrok http 8000
-```
-Note the public URL (e.g., https://your-server.ngrok.io) for the next steps.
-
-Add to ChatGPT with the following:
-​
-1. Enable Developer Mode
-   Open ChatGPT and go to Settings → Connectors
-   Under Advanced, toggle Developer Mode to enabled
-​
-2. Create Connector
-   In Settings → Connectors, click Create
-   Enter:
-      Name: Keyphrases-MCP
-      Server URL: https://your-server.ngrok.io/mcp/
-    Check I trust this provider
-    Click Create
-
-Use in Chat
-
-1. Start a new chat
-
-2. Click the + button → More → Developer Mode
-   Enable your MCP server connector (required - the connector must be explicitly added to each chat)
-
-Now you can use the tool.
-
-### With Docker
-
-You can use a dockerized deployment of this server to provide access via Streamable HTTP transport to MCP clients as follows:
-
-Build the image, it will take ~10 GB of the disk space.
-
-```sh
-docker build -f Dockerfile-deploy -t keyphrases-mcp .
-```
-
-Run the container exposing ports, temporary directory to store the embeddings model, and documents directory.
-
-```sh
-docker run --rm --name keyphrases-mcp-server -i -v <tmp_directory_path>/embeddings_model:/app/embeddings_model -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
-````
-
-### OpenAI Agents SDK
-
-Integrate this MCP Server with the OpenAI Agents SDK. Read the [documents](https://openai.github.io/openai-agents-python/mcp/) to learn more about the integration of the SDK with MCP.
-
-Install the Python SDK.
-
-```sh
-pip install openai-agents
-```
-
-Configure the OpenAI token:
-
-```sh
-export OPENAI_API_KEY="<openai_token>"
-```
-
-And run the [application](./openai_agents_sdk/keyphrases_assistant.py).
-
-```sh
-cd openai_agents_sdk && python keyphrases_assistant.py --allowed-dir <path_to_documents>
-```
-
-You can troubleshoot your agent workflows using the [OpenAI dashboard](https://platform.openai.com/traces/).
-
-
-### Claude Desktop
-
-Run the following command once to download embeddings and spaCy models.
-
-```sh
-<path_to_uvx>/bin/uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --download-models
-```
-
-Update the Claude configuration file on macOS: `~/Library/Application Support/Claude/claude_desktop_config.json` on windows: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the kyphrases-mcp server configuration to run it from pypi org with `uvx`:
-```json
-{
-  "mcpServers": {
-    "keyphrases-mcp-server": {
-        "type": "stdio",
-        "command": "<path_to_uvx>/bin/uvx",
-        "args": [
-            "--from", "git+https://github.com/IvanRublev/keyphrases-mcp.git",
-            "keyphrases-mcp-server",
-            "--allowed-dir", "<path_to_documents>"
-        ]
-    }
-  }
-}
-```
-
-Start the application. It will take some time do download ~1 GB of dependencies on the first launch.
-
-Alternatively, you can clone the source code from the GitHub repository and start the server using `uv`. This is usually desired for development.
-```json
-{
-  "mcpServers": {
-    "keyphrases-mcp-server": {
-        "type": "stdio",
-        "command": "<path_to_uv>/bin/uv",
-        "args": [
-	        "run",
-            "--directory", "<path_to_keyphrases-mcp>/src",
-            "-m", "main",
-            "--allowed-dir", "<path_to_documents>"
-        ]
-    }
-  }
-}
-```
-
-## Development
-
-Build from the source and intsall dependencies:
-
-```sh
-git clone https://github.com/IvanRublev/keyphrases-mcp.git
-cd keyphrases-mcp
-asdf install
-uv venv --no-managed-python
-uv sync --dev --locked
-```
-
-Run linters and tests with:
-
-```sh
-ruff check . 
-pyrefly check .
-pytest
-```
-
-## Integration testing
-
-You can use the [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector) for visual debugging of this MCP Server.
-
-```sh
-npx @modelcontextprotocol/inspector uv run src/main.py --allowed-dir <path_to_documents>
-```
-
-## Contributing
-1. Fork the repo
-2. Create a new branch (`feature-branch`)
-3. Run linters and tests
-4. Commit your changes
-5. Push to your branch and submit a PR!
+- **[🚀 Integration](docs/integration.md)** - How to integrate server with your MCP client or LLM
+- **[🔧 Configuration](docs/configuration.md)** - Environment variables and settings
+- **[🛠️ MCP Tools](docs/mcp-tools.md)** - All available tools
+- **[🪵 Development and testing](docs/roadmap.md)** - Guide on how to contribute to the project
 
 ## License
 This project is licensed under the **MIT License**.
