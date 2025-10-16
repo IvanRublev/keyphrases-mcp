@@ -6,7 +6,9 @@
 
 <a href="https://glama.ai/mcp/servers/@IvanRublev/keyphrases-mcp">
   Glama.ai<br><img width="380" height="200" src="https://glama.ai/mcp/servers/@IvanRublev/keyphrases-mcp/badge" />
-</a>
+</a> 
+
+[![smithery badge](https://smithery.ai/badge/@IvanRublev/keyphrases-mcp)](https://smithery.ai/server/@IvanRublev/keyphrases-mcp)
 
 *Built with the following tools and technologies:*
 

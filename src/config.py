@@ -33,7 +33,7 @@ MAX_TEXT_LEN = getenv_type("MCP_KEYPHRASES_MAX_TEXT_LEN", default=6_000, type=in
 
 MAX_KEYPHRASES_COUNT = getenv_type("MCP_KEYPHRASES_MAX_KEYPHRASES_COUNT", default=200, type=int)
 
-HTTP_PORT = getenv_type("MCP_KEYPHRASES_HTTP_PORT", default=8000, type=int)
+HTTP_PORT = getenv_type("PORT", default=8000, type=int)
 
 
 allowed_dirs: list[str] = []

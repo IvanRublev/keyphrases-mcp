@@ -13,7 +13,7 @@
 | MCP_KEYPHRASES_LOG_LEVEL             | Log lever                                      | `INFO`                                  |
 | MCP_KEYPHRASES_MAX_TEXT_LEN          | Maximal length of the input text in characters | `6000`                                  |
 | MCP_KEYPHRASES_MAX_KEYPHRASES_COUNT  | Maximal number of keyphrases to extract        | `elastic`                               |
-| MCP_KEYPHRASES_HTTP_PORT             | HTTP port for MCP server                       | `apple_health_data`                     |
+| PORT                                 | HTTP port for MCP server                       | `apple_health_data`                     |
 
 
 There are various [pretrained embedding models](https://www.sbert.net/docs/sentence_transformer/pretrained_models.html)
