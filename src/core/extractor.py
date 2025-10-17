@@ -4,6 +4,7 @@ import shutil
 from typing import Callable, cast, TYPE_CHECKING
 
 if TYPE_CHECKING:
+    from spacy.language import Language as SpacyLanguage
     from keybert import KeyBERT
     from sklearn.feature_extraction.text import CountVectorizer
 
@@ -11,6 +12,7 @@ from src.config import embeddings_model_path, EMBEDDINGS_MODEL, SPACY_TOKENIZER_
 
 # Initialize global variables
 keybert_instance: "KeyBERT | None" = None
+spacy_pipeline: "SpacyLanguage | None" = None
 default_stop_words: set[str] = set()
 
 
@@ -57,7 +59,7 @@ def download_spacy_model(on_start: Callable[[], Callable], on_stop: Callable[[Ca
 
 
 def initialize_keybert() -> tuple[str, str]:
-    global keybert_instance, default_stop_words
+    global keybert_instance, spacy_pipeline, default_stop_words
     if keybert_instance is not None:
         return "", ""
 
@@ -89,7 +91,12 @@ def initialize_keybert() -> tuple[str, str]:
     keybert_instance = KeyBERT(model=sentence_model)
 
     # Load spaCy model after GPU configuration
-    default_stop_words = spacy.load(SPACY_TOKENIZER_MODEL).Defaults.stop_words
+    spacy_pipeline = spacy.load(
+        SPACY_TOKENIZER_MODEL,
+        exclude=["parser", "attribute_ruler", "lemmatizer", "ner", "textcat"],
+    )
+
+    default_stop_words = spacy_pipeline.Defaults.stop_words
 
     return keybert_device, spacy_device
 
@@ -97,6 +104,9 @@ def initialize_keybert() -> tuple[str, str]:
 def extract_keyphrases(text: str, stop_words: list[str], keyphrases_count: int) -> list[str]:
     if keybert_instance is None:
         raise RuntimeError("KeyBERT not initialized. Call common_init() first.")
+
+    if spacy_pipeline is None:
+        raise RuntimeError("spaCy pipeline not initialized. Call common_init() first.")
 
     all_stop_words = default_stop_words.copy()
     all_stop_words.update(stop_words)
@@ -106,7 +116,7 @@ def extract_keyphrases(text: str, stop_words: list[str], keyphrases_count: int) 
     vectorizer = KeyphraseCountVectorizer(
         lowercase=False,
         stop_words=list(all_stop_words),
-        spacy_pipeline=SPACY_TOKENIZER_MODEL,
+        spacy_pipeline=spacy_pipeline,
     )
 
     keyphrase_weights = keybert_instance.extract_keywords(
