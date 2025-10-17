@@ -2,14 +2,6 @@
 
 *Empowering LLMs with authentic keyphrase Extraction*
 
-*Available in:*
-
-<a href="https://glama.ai/mcp/servers/@IvanRublev/keyphrases-mcp">
-  Glama.ai<br><img width="380" height="200" src="https://glama.ai/mcp/servers/@IvanRublev/keyphrases-mcp/badge" />
-</a> 
-
-[![smithery badge](https://smithery.ai/badge/@IvanRublev/keyphrases-mcp)](https://smithery.ai/server/@IvanRublev/keyphrases-mcp)
-
 *Built with the following tools and technologies:*
 
 <img src="https://img.shields.io/badge/MCP-6A5ACD.svg?style=default&logo=data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjNkE1QUNEIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiI+PHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiByeD0iNCIvPjx0ZXh0IHg9IjgiIHk9IjExIiBmb250LXNpemU9IjgiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IndoaXRlIj5NQ1A8L3RleHQ+PC9zdmc+" alt="MCP"> <img src="https://img.shields.io/badge/PyTorch-EE4C2C.svg?style=default&logo=PyTorch&logoColor=white" alt="PyTorch"> <img src="https://img.shields.io/badge/Python-3776AB.svg?style=default&logo=Python&logoColor=white" alt="Python"> <img src="https://img.shields.io/badge/uv-DE5FE9.svg?style=default&logo=uv&logoColor=white" alt="uv">
@@ -18,7 +10,7 @@
 
 ## Overview
 
-This Keyphrases MCP Server is a **natural language interface** designed for agentic applications to extract keyphrasess from provided text. It integrates seamlessly with **MCP (Model Content Protocol) clients**, enabling AI-driven workflows to extract keyphrases more accurately and with higher relevance using the BERT machine learning model. It works directly with your local files in the allowed directories saving the context tokens for your agentic LLM. The application ensures secure document processing by exposing only extracted keyphrases to the MCP client, not the original file content.
+This Keyphrases MCP Server is a **natural language interface** designed for agentic applications to extract keyphrasess from provided text. It integrates seamlessly with **MCP (Model Content Protocol) clients**, enabling AI-driven workflows to extract keyphrases more accurately and with higher relevance using the BERT machine learning model. It works directly with your local files in the allowed directories saving the context tokens for the LLM. The application ensures secure document processing by exposing only extracted keyphrases to the MCP client, not the original file content.
 
 Using this MCP Server, you can ask the following questions:
 
@@ -59,7 +51,7 @@ See configuration document for details.
 - **[🚀 Integration](docs/integration.md)** - How to integrate server with your MCP client or LLM
 - **[🔧 Configuration](docs/configuration.md)** - Environment variables and settings
 - **[🛠️ MCP Tools](docs/mcp-tools.md)** - All available tools
-- **[🪵 Development and testing](docs/roadmap.md)** - Guide on how to contribute to the project
+- **[🪵 Development and testing](docs/development-and-testing.md)** - Guide on how to contribute to the project
 
 ## License
 This project is licensed under the **MIT License**.

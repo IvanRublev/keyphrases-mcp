@@ -57,6 +57,8 @@ to validate it's starting properly.
 docker run --rm --name keyphrases-mcp-server -i -v <path_to_documents>:/app/documents -p 8000:8000 keyphrases-mcp:latest
 ```
 
+To provide CUDA GPU acceleration to the app, add the `--gpus all` flag to the command above.
+
 Add the following configuration to your MCP client settings with validated paths:
 
 ```json
@@ -107,6 +109,8 @@ You can troubleshoot your agent workflows using the [OpenAI dashboard](https://p
 ## Claude Desktop
 
 Run the following command once to download embeddings and spaCy models.
+
+> [uv Installation Guide](https://docs.astral.sh/uv/getting-started/installation/)
 
 ```sh
 <path_to_uvx>/bin/uvx --from git+https://github.com/IvanRublev/keyphrases-mcp.git keyphrases-mcp-server --download-models

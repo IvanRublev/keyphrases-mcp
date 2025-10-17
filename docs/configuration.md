@@ -40,6 +40,7 @@ docker run
     -i \
     -v <path_to_documents>:/app/documents \
     -p 8000:8000 \
+    --gpus all \
     -e MCP_KEYPHRASES_EMBEDDINGS_MODEL="<selecled_embeddings_model>" \
     -e MCP_KEYPHRASES_SPACY_TOKENIZER_MODEL="<selected_spacy_model>" \
     mcp-keyphrases:latest
