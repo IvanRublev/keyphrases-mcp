@@ -37,6 +37,9 @@ dependencies = [
 [project.scripts]
 keyphrases-mcp-server = "src.main:main"
 
+[tool.smithery] 
+server = "my_server.server:create_server"
+
 [build-system]
 requires = ["uv_build>=0.8.3,<0.9.0"]
 build-backend = "uv_build"
